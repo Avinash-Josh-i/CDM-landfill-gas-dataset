@@ -1,0 +1,12 @@
+pandas>=2.2
+requests>=2.32
+numpy>=1.26
+beautifulsoup4>=4.12
+lxml>=5.2
+rapidfuzz>=3.9
+playwright>=1.46
+cdsapi>=0.7
+xarray>=2024.6
+netCDF4>=1.7
+openpyxl>=3.1
+pyarrow>=17.0

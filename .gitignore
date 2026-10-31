@@ -1,0 +1,49 @@
+# .gitignore for Asia Landfill Project
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Environment
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.out
+
+# Large data files (keep structure, ignore large downloads)
+data/raw/climate/nasa_power/*.json
+data/raw/cdm/mr/*/*.pdf
+data/raw/cdm/census/mr/*.pdf
+data/raw/cdm/census/pdd/*.pdf
+data/raw/climate/*.json
+
+# Temporary
+*.tmp
+*.bak
+*.cache
+
+# Credentials
+.cdsapirc
+credentials.json
