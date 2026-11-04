@@ -1188,6 +1188,12 @@ def write_report(triage: pd.DataFrame, matches: pd.DataFrame, proposals: pd.Data
     ]  # noqa: E712
     conflicts = proposals[proposals["status"] == "conflict"]
     holds = proposals[proposals["status"] == "hold"]
+    applied_cells = None
+    if ACTUAL.exists():
+        hist = pd.read_csv(ACTUAL, dtype=str, keep_default_na=False)
+        applied_cells = int(
+            (hist.get("integration_action", pd.Series(dtype=str)) == "applied").sum()
+        )
     lines = [
         "# Excel / Manual Source Ingest Report",
         "",
@@ -1260,13 +1266,14 @@ def write_report(triage: pd.DataFrame, matches: pd.DataFrame, proposals: pd.Data
         "",
         "## Proposals",
         "",
-        f"- Approved & applied: **{len(applied)}**",
+        f"- Approved & applied: **{len(applied)}** values"
+        + (f" ({applied_cells} cells incl. companions)" if applied_cells else ""),
         f"- Conflicts (not applied): **{len(conflicts)}**",
         f"- Held for review: **{len(holds)}**",
         "",
     ]
     if not diff.empty:
-        lines.append("### Applied")
+        lines.append("### Applied in the most recent run")
         lines.append("")
         lines.append("| Site | Column | Old | New | Source |")
         lines.append("|---|---|---|---|---|")
@@ -1276,6 +1283,12 @@ def write_report(triage: pd.DataFrame, matches: pd.DataFrame, proposals: pd.Data
                 f"`{d['new_value']}` | {d['source']} |"
             )
         lines.append("")
+        if applied_cells:
+            lines.append(
+                f"Full applied history: `{ACTUAL.relative_to(Path.cwd())}` "
+                f"({applied_cells} cells, all `integration_action=applied`)."
+            )
+            lines.append("")
     if not conflicts.empty:
         lines.append("### Conflicts / holds")
         lines.append("")
