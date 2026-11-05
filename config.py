@@ -3,13 +3,15 @@
 Layout (Phase 1, publication build)
 ------------------------------------
 data/raw/climate/                 Climate TRACE API responses
-data/raw/cdm/index/               cached UNFCCC CDM project pages (JSON)
+data/raw/cdm/index/               CDM project tracker CSVs
 data/raw/cdm/mr/                  monitoring-report PDFs (Tier A archive)
 data/raw/cdm/census/              census PDDs + census MR sample
+data/raw/cdm/attachments/         retained applied attachment workbooks
 data/raw/national/                national / bilateral source files
 data/interim/climate/             normalised Climate TRACE + NASA POWER tables
 data/interim/cdm/                 CDM discovery, extraction and census tables
 data/processed/                   sites.csv, annual_observations.csv, climate.csv
+data/processed/integrated/        flat 108-site table + Excel workbook
 data/repository/                  publication export + data dictionary + manifest
 """
 from pathlib import Path
