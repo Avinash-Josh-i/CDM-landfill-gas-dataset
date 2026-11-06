@@ -1,5 +1,7 @@
 # Asian CDM Landfill Gas & Engineering Dataset
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24019455.svg)](https://doi.org/10.5281/zenodo.24019455)
+
 **A provenance-tracked, site-level dataset of 108 CDM-anchored landfill sites in
 16 Asian countries.**
 

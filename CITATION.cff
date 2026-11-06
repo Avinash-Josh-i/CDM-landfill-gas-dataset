@@ -19,6 +19,9 @@ keywords:
   - waste
   - environmental data
   - monitoring
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24019455"
 abstract: >-
   A provenance-tracked, site-level dataset of 108 CDM-anchored landfill sites in
   16 Asian countries. It combines measured landfill-gas recovery at 22 sites,
