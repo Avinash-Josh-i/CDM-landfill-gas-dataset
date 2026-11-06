@@ -66,7 +66,7 @@ LANDFILL_DETAILS = OUT / "landfill_details_covariates.csv"
 TRIAGE = OUT / "file_triage.csv"
 CANDIDATES = OUT / "attachment_candidate_values.csv"
 DIFF = INTERIM / "excel_ingest_diff.csv"
-REPORT = Path(__file__).resolve().parents[1] / "docs" / "EXCEL_INGEST_REPORT.md"
+REPORT = INTERIM / "excel_ingest_report.md"
 
 ALLOWED_DESIGN = {"sanitary_landfill", "controlled_dump", "open_dump"}
 LEACHATE_TOKENS = {"collection", "extraction", "treatment", "recirculation", "pond"}

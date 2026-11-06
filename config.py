@@ -12,7 +12,6 @@ data/interim/climate/             normalised Climate TRACE + NASA POWER tables
 data/interim/cdm/                 CDM discovery, extraction and census tables
 data/processed/                   sites.csv, annual_observations.csv, climate.csv
 release/v1.0/                     canonical public release (data + docs + manifest)
-data/repository/                  legacy export path used by older scripts (ignored)
 """
 from pathlib import Path
 
@@ -21,7 +20,6 @@ DATA = ROOT / "data"
 RAW = DATA / "raw"
 INTERIM = DATA / "interim"
 PROCESSED = DATA / "processed"
-REPOSITORY = DATA / "repository"
 DOCS = ROOT / "docs"
 
 RAW_CLIMATE = RAW / "climate"
@@ -29,7 +27,7 @@ RAW_CDM = RAW / "cdm"
 INTERIM_CLIMATE = INTERIM / "climate"
 INTERIM_CDM = INTERIM / "cdm"
 
-for _d in (RAW, INTERIM, PROCESSED, REPOSITORY, DOCS,
+for _d in (RAW, INTERIM, PROCESSED, DOCS,
            RAW_CLIMATE, RAW_CDM, INTERIM_CLIMATE, INTERIM_CDM):
     _d.mkdir(parents=True, exist_ok=True)
 

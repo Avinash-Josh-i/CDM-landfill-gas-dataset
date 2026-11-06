@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-11-06 — Repository cleanup
+
+- Removed legacy files that are superseded by `release/v1.0/`:
+  `scripts/11_geocode_missing.py`, `scripts/12_fix_geocodes.py`,
+  `scripts/15_build_integrated_dataset.py`, the three `templates/*.csv`
+  files, `docs/EXCEL_INGEST_REPORT.md`, `docs/MANUAL_DATA_COLLECTION_GUIDE.md`
+  and `tests/test_data_integrity.py`.
+- `scripts/09_build_repository.py` now writes only the frozen master tables;
+  its repository/template export was removed. `scripts/14_ingest_excel_sources.py`
+  writes its report to the gitignored `data/interim/` directory.
+- Dropped the unused `REPOSITORY` path from `config.py`.
+
 ## 2026-11-06 — v1.0.0 public release
 
 - Added the publishable `release/v1.0/` package: cleaned single-grain tables,

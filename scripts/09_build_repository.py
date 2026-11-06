@@ -17,7 +17,6 @@ Outputs
 data/processed/sites.csv                  one row per landfill
 data/processed/annual_observations.csv    one row per landfill-year
 data/processed/climate.csv                one row per landfill-year
-data/repository/                          publication copies + README + dictionary + manifest
 
 Stages
 ------
@@ -35,17 +34,15 @@ import hashlib
 import importlib.util
 import json
 import re
-import shutil
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from config import (DOCS, INTERIM_CDM, INTERIM_CLIMATE, PROCESSED, RAW_CDM,
-                    REPOSITORY, ROOT, TIER_DEFINITIONS)
+from config import (INTERIM_CDM, INTERIM_CLIMATE, PROCESSED, RAW_CDM,
+                    TIER_DEFINITIONS)
 
 CENSUS = INTERIM_CDM / "census" / "cdm_census_lfg.csv"
 TIER_B_DIR = INTERIM_CDM / "tier_b"
@@ -57,7 +54,6 @@ CT_ASIA = INTERIM_CLIMATE / "climatetrace_asia_solid_waste_ch4.csv"
 NASA = INTERIM_CLIMATE / "nasa_power_annual.csv"
 COORDS = INTERIM_CLIMATE / "site_coordinates.csv"
 TIER_A_INFLOW_CACHE = INTERIM_CDM / "tier_a_annual_inflow.csv"
-TEMPLATES = ROOT / "templates"
 
 HOST_ISO3 = {
     "China": "CHN", "India": "IND", "Indonesia": "IDN", "Philippines": "PHL",
@@ -486,102 +482,12 @@ def add_site_qa(sites: pd.DataFrame) -> pd.DataFrame:
     return sites
 
 
-def _sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
-
-
-def write_templates() -> None:
-    TEMPLATES.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(columns=SITE_COLUMNS).to_csv(TEMPLATES / "sites_template.csv", index=False)
-    pd.DataFrame(columns=OBS_COLUMNS).to_csv(TEMPLATES / "annual_observations_template.csv", index=False)
-    pd.DataFrame(columns=CLIMATE_COLUMNS).to_csv(TEMPLATES / "climate_template.csv", index=False)
-
-
 def export(sites: pd.DataFrame, obs: pd.DataFrame, climate: pd.DataFrame) -> None:
-    REPOSITORY.mkdir(parents=True, exist_ok=True)
+    """Write the frozen master tables. Publication export lives in scripts/16."""
+    PROCESSED.mkdir(parents=True, exist_ok=True)
     for df, name in ((sites, "sites.csv"), (obs, "annual_observations.csv"),
                      (climate, "climate.csv")):
         df.to_csv(PROCESSED / name, index=False)
-        shutil.copy2(PROCESSED / name, REPOSITORY / name)
-
-    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    rows = []
-    for name in ("sites.csv", "annual_observations.csv", "climate.csv"):
-        p = REPOSITORY / name
-        rows.append({"file": name, "rows": sum(1 for _ in p.open()) - 1,
-                     "bytes": p.stat().st_size, "sha256": _sha256(p),
-                     "generated_at_utc": stamp})
-    pd.DataFrame(rows).to_csv(REPOSITORY / "manifest.csv", index=False)
-
-    if (ROOT / "sources" / "source_registry.csv").exists():
-        shutil.copy2(ROOT / "sources" / "source_registry.csv",
-                     REPOSITORY / "source_registry.csv")
-
-    (REPOSITORY / "README.md").write_text(_readme(sites, obs, climate, stamp))
-    (REPOSITORY / "data_dictionary.md").write_text(_dictionary())
-
-
-def _readme(sites: pd.DataFrame, obs: pd.DataFrame, climate: pd.DataFrame, stamp: str) -> str:
-    ta = sites[sites["evidence_tier"] == "tier_a"]
-    tb = sites[sites["evidence_tier"] == "tier_b"]
-    ce = ta["ce_basis"].fillna("not_reported").value_counts()
-    return f"""# Asian Landfill Data Repository
-
-Generated {stamp} by `scripts/09_build_repository.py`.
-
-## Contents
-
-| File | Rows | Grain | Description |
-|---|---|---|---|
-| `sites.csv` | {len(sites)} | one row per landfill | identity, coordinates, design, waste history, QA flags |
-| `annual_observations.csv` | {len(obs)} | one row per landfill-year | waste inflow and, for Tier A, metered LFG / methane |
-| `climate.csv` | {len(climate)} | one row per landfill-year | NASA POWER annual temperature, humidity, precipitation |
-
-## Evidence tiers
-
-- **Tier A** ({len(ta)} sites): CDM sites with a metered landfill-gas series and >=10 years
-  of documented waste placement. `annual_observations.csv` carries `lfg_total_nm3`,
-  `ch4_fraction` and derived methane masses.
-- **Tier B** ({len(tb)} sites): engineered landfills with documented design/operation but
-  **no metered LFG**. Waste inflow and design attributes only.
-
-## Known limitations
-
-- Collection efficiency is **assumed** at {int(ce.get('assumed', 0))} Tier A sites,
-  reported at {int(ce.get('reported', 0))}, measured at {int(ce.get('measured', 0))},
-  and not reported at {int(ce.get('not_reported', 0))}.
-- Coordinates are parsed from the PDD where stated; sites without a PDD coordinate use a
-  flagged Climate TRACE name match (`coordinate_source`), otherwise stay missing.
-- Missing values are never imputed. Check `qa_*` columns before use.
-
-## Provenance
-
-Every site row carries `provenance_reference`; every observation carries its source
-document. `manifest.csv` records row counts and SHA-256 checksums for the three tables.
-"""
-def _dictionary() -> str:
-    lines = ["# Data dictionary", "", "## sites.csv", ""]
-    for c in SITE_COLUMNS:
-        lines.append(f"- `{c}`")
-    lines += ["", "## annual_observations.csv", ""]
-    for c in OBS_COLUMNS:
-        lines.append(f"- `{c}`")
-    lines += ["", "## climate.csv", ""]
-    for c in CLIMATE_COLUMNS:
-        lines.append(f"- `{c}`")
-    lines += ["", "## QA flag values", "",
-              "- `qa_coords`: `ok` | `proxy` | `missing`",
-              "- `qa_waste_history`: `ok` (>=10y) | `short` | `unknown`",
-              "- `qa_composition`: `parsed` | `not_reported`",
-              "- `qa_ce`: `measured` | `assumed` | `reported` | `not_reported`",
-              "- `qa_provenance`: `ok` | `missing`",
-              "- `qa_climate`: `complete` (12 months) | `partial` | `missing`",
-              ""]
-    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
@@ -598,13 +504,12 @@ def main():
         sites = ensure_columns(sites, SITE_COLUMNS)[SITE_COLUMNS]
         obs = build_observations(sites)
         climate = build_climate(sites)
-        write_templates()
         export(sites, obs, climate)
         print(f"sites: {len(sites)} (tier_a={int((sites.evidence_tier=='tier_a').sum())}, "
               f"tier_b={int((sites.evidence_tier=='tier_b').sum())})")
         print(f"annual observations: {len(obs)} site-years")
         print(f"climate: {len(climate)} site-years")
-        print(f"exported to {REPOSITORY}")
+        print(f"wrote master tables to {PROCESSED}")
 
 
 if __name__ == "__main__":

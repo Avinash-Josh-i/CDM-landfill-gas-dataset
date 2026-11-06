@@ -75,8 +75,8 @@ data/raw/              source PDFs/JSON/workbooks (local only, not published)
 data/interim/          extraction, audit and provenance tables (local only)
 scripts/               numbered data pipeline + release builder
 notebooks/             quickstart notebook
-tests/                 data-integrity and release tests
-docs/                  methodology and collection guides
+tests/                 release-integrity tests
+docs/                  methodology notes
 ```
 
 Raw PDFs, workbooks, API responses and extraction logs are **not** redistributed.

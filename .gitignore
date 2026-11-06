@@ -62,13 +62,6 @@ data/raw/
 # Interim extraction, audit, validation cache and provenance tables
 data/interim/
 
-# Legacy publication export (superseded by release/v1.0/)
-data/repository/
-
-# Local cleanup record and old repository-wide manifest (superseded by release manifest)
-CLEANUP_DELETED_FILES.txt
-data_manifest.csv
-
 # Large local archives
 *.zip
 *.7z
