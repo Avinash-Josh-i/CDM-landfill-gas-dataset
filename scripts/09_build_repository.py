@@ -1,4 +1,10 @@
-"""Assemble the publication-ready Asian Landfill Data Repository.
+"""Assemble the frozen master tables for the Asian Landfill dataset.
+
+.. note::
+   The publication-export part of this script is **superseded** by
+   ``scripts/16_build_release.py``, which writes the canonical public package to
+   ``release/v1.0/``. This script still produces the frozen master tables in
+   ``data/processed/`` that the release builder reads.
 
 Joins the three evidence layers into one coherent, provenance-carrying dataset:
 

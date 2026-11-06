@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Build the integrated 108-site deliverable without touching the source files.
 
+.. note::
+   **Superseded** by ``scripts/16_build_release.py``. The canonical integrated
+   table is now ``release/v1.0/data/integrated_sites_108.csv``. Kept for
+   reproducibility of the earlier Excel deliverable.
+
 Outputs
 -------
 data/processed/integrated/sites_108_integrated.csv   one row per site

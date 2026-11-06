@@ -1,0 +1,18 @@
+[project]
+name = "asian-cdm-landfill-dataset"
+version = "1.0.0"
+description = "Site-level landfill gas, engineering and climate evidence for 108 CDM-anchored landfill sites in Asia."
+readme = "release/v1.0/README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Avinash Joshi" }]
+keywords = ["landfill", "landfill gas", "methane", "CDM", "Asia", "waste"]
+classifiers = [
+  "Topic :: Scientific/Engineering :: Atmospheric Science",
+  "Topic :: Scientific/Engineering :: GIS",
+  "License :: OSI Approved :: MIT License",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

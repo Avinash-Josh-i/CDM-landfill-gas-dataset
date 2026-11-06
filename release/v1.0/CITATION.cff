@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it using the metadata below. A DOI will be added after the Zenodo deposit."
+title: "Asian CDM Landfill Gas & Engineering Dataset"
+version: 1.0.0
+date-released: 2026-11-06
+type: dataset
+license: CC-BY-4.0
+license-url: "https://creativecommons.org/licenses/by/4.0/"
+authors:
+  - family-names: Joshi
+    given-names: Avinash
+    affiliation: "Independent researcher"
+keywords:
+  - landfill
+  - landfill gas
+  - methane
+  - CDM
+  - Asia
+  - waste
+  - environmental data
+  - monitoring
+abstract: >-
+  A provenance-tracked, site-level dataset of 108 CDM-anchored landfill sites in
+  16 Asian countries. It combines measured landfill-gas recovery at 22 sites,
+  engineering and waste-history attributes for 86 additional sites, 534 annual
+  waste-inflow records, waste-composition records for 42 sites, and 1,728
+  site-years of NASA POWER climate covariates. It is not a national emissions
+  inventory and must not be used for country-level methane totals.
+references:
+  - type: generic
+    title: "UNFCCC Clean Development Mechanism project search"
+    url: "https://cdm.unfccc.int/Projects/projsearch.html"
+  - type: generic
+    title: "NASA POWER"
+    url: "https://power.larc.nasa.gov/"
+  - type: generic
+    title: "Climate TRACE"
+    url: "https://climatetrace.org/data"
+  - type: generic
+    title: "SIPSN Indonesia — TPA/TPST facility inventory"
+    url: "https://sampahnasional.kemenlh.go.id/portal-indikatif/fasilitas/tpa-tpst"

@@ -11,8 +11,8 @@ data/raw/national/                national / bilateral source files
 data/interim/climate/             normalised Climate TRACE + NASA POWER tables
 data/interim/cdm/                 CDM discovery, extraction and census tables
 data/processed/                   sites.csv, annual_observations.csv, climate.csv
-data/processed/integrated/        flat 108-site table + Excel workbook
-data/repository/                  publication export + data dictionary + manifest
+release/v1.0/                     canonical public release (data + docs + manifest)
+data/repository/                  legacy export path used by older scripts (ignored)
 """
 from pathlib import Path
 

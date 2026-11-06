@@ -1,4 +1,8 @@
-# .gitignore for Asia Landfill Project
+# ---------------------------------------------------------------------------
+# Asia Landfill Project — public release .gitignore
+# Track: release/v1.0/, data/processed/ master tables, scripts, tests, docs.
+# Ignore: raw source documents, interim extraction data, local caches.
+# ---------------------------------------------------------------------------
 
 # Python
 __pycache__/
@@ -10,40 +14,63 @@ __pycache__/
 venv/
 env/
 ENV/
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / type / lint caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
 
 # Jupyter
-.ipynb_checkpoints
+.ipynb_checkpoints/
+*.nbconvert.ipynb
 
-# Environment
+# Environment and credentials
 .env
 *.env
+.cdsapirc
+credentials.json
 
-# IDE
+# IDE / OS
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# OS
 .DS_Store
 Thumbs.db
 
-# Logs
+# Logs and temporary files
 *.log
 *.out
-
-# Large data files (keep structure, ignore large downloads)
-data/raw/climate/nasa_power/*.json
-data/raw/cdm/mr/*/*.pdf
-data/raw/cdm/census/mr/*.pdf
-data/raw/cdm/census/pdd/*.pdf
-data/raw/climate/*.json
-
-# Temporary
 *.tmp
 *.bak
 *.cache
 
-# Credentials
-.cdsapirc
-credentials.json
+# ---------------------------------------------------------------------------
+# Local-only data
+# ---------------------------------------------------------------------------
+# Raw source documents (CDM PDFs, API JSON, workbooks, national sources)
+data/raw/
+
+# Interim extraction, audit, validation cache and provenance tables
+data/interim/
+
+# Legacy publication export (superseded by release/v1.0/)
+data/repository/
+
+# Local cleanup record and old repository-wide manifest (superseded by release manifest)
+CLEANUP_DELETED_FILES.txt
+data_manifest.csv
+
+# Large local archives
+*.zip
+*.7z
+*.tar
+*.tar.gz
